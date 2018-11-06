@@ -38,6 +38,7 @@ namespace bpo = boost::program_options;
 
 app_template::app_template(app_template::config cfg)
     : _cfg(std::move(cfg))
+    , _current_app(this)
     , _opts(_cfg.name + " options")
     , _conf_reader(get_default_configuration_reader()) {
         _opts.add_options()
@@ -51,6 +52,14 @@ app_template::app_template(app_template::config cfg)
         _opts_conf_file.add(log_cli::get_options_description());
 
         _opts.add(_opts_conf_file);
+}
+
+static app_template::app_template app_template::get_current_app() {
+    return _current_app;
+}
+
+app_template::config app_template::get_app_config() {
+    return app_template::get_current_app()._config;
 }
 
 app_template::configuration_reader app_template::get_default_configuration_reader() {

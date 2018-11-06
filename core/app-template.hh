@@ -33,6 +33,7 @@ class app_template {
 public:
     struct config {
         sstring name = "App";
+        sstring version = "commit-hash";
         std::chrono::duration<double> default_task_quota = std::chrono::microseconds(500);
         config() {}
     };
@@ -40,6 +41,7 @@ public:
     using configuration_reader = std::function<void (boost::program_options::variables_map&)>;
 private:
     config _cfg;
+    static app_template _current_app;
     boost::program_options::options_description _opts;
     boost::program_options::options_description _opts_conf_file;
     boost::program_options::positional_options_description _pos_opts;
@@ -75,6 +77,11 @@ public:
     // with exit code 0 when the future returned by func resolves
     // successfully.
     int run(int ac, char ** av, std::function<future<> ()>&& func);
+
+    // Return the current application template object.
+    static app_template get_current_app();
+
+    config get_app_config();
 };
 
 }

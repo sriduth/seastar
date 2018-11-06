@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "core/print.hh"
+#include "core/app-template.hh"
 
 
 namespace seastar {
@@ -98,6 +99,10 @@ size_t saved_backtrace::hash() const {
 }
 
 std::ostream& operator<<(std::ostream& out, const saved_backtrace& b) {
+    app_template::config config = app_template::get_app_config();
+
+    out << " Scylla version : " << config.version;
+    
     for (auto f : b._frames) {
         out << "  ";
         if (!f.so->name.empty()) {
